@@ -9,26 +9,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.apparts.sites.appartssite1.ui.theme.AppTheme
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -48,103 +44,45 @@ data class ProjectDetail(val projectId: String)
 fun App() {
     AppTheme {
         val navController = rememberNavController()
-        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-        val scope = rememberCoroutineScope()
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
+        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-        ModalNavigationDrawer(
-            drawerState = drawerState,
-            drawerContent = {
-                ModalDrawerSheet {
-                    Spacer(Modifier.height(12.dp))
-                    NavigationDrawerItem(
-                        icon = { Icon(Icons.Default.Home, contentDescription = null) },
-                        label = { Text("Home") },
-                        selected = currentRoute?.contains("Home") == true,
-                        onClick = {
-                            navController.navigate(Home)
-                            scope.launch { drawerState.close() }
-                        }
-                    )
-                    NavigationDrawerItem(
-                        icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) },
-                        label = { Text("Projects") },
-                        selected = currentRoute?.contains("Projects") == true,
-                        onClick = {
-                            navController.navigate(Projects)
-                            scope.launch { drawerState.close() }
-                        }
-                    )
-                    NavigationDrawerItem(
-                        icon = { Icon(Icons.Default.Info, contentDescription = null) },
-                        label = { Text("About") },
-                        selected = currentRoute?.contains("About") == true,
-                        onClick = {
-                            navController.navigate(About)
-                            scope.launch { drawerState.close() }
-                        }
-                    )
-                }
+        Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = {
+                TopAppBar(
+                    title = { Text("AppArts Portfolio", fontWeight = FontWeight.Bold) },
+                    actions = {
+                        TextButton(onClick = { navController.navigate(Home) }) { Text("Home") }
+                        TextButton(onClick = { navController.navigate(Projects) }) { Text("Projects") }
+                        TextButton(onClick = { navController.navigate(About) }) { Text("About") }
+                    },
+                    scrollBehavior = scrollBehavior
+                )
             }
-        ) {
-            Scaffold(
-                topBar = {
-                    CenterAlignedTopAppBar(
-                        title = { Text("AppArts Portfolio", fontWeight = FontWeight.Bold) },
-                        navigationIcon = {
-                            IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                                Icon(Icons.Default.Menu, contentDescription = "Menu")
-                            }
-                        },
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
-                            scrolledContainerColor = Color.Unspecified,
-                            navigationIconContentColor = Color.Unspecified,
-                            titleContentColor = MaterialTheme.colorScheme.primary,
-                            actionIconContentColor = Color.Unspecified
+        ) { innerPadding ->
+            Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                // Background Gradient
+                Box(
+                    modifier = Modifier.fillMaxSize().background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
+                                MaterialTheme.colorScheme.background
+                            )
                         )
                     )
-                }
-            ) { innerPadding ->
-                Box(modifier = Modifier.fillMaxSize()) {
-                    // Background Image Gradient for a professional feel
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(
-                                Brush.verticalGradient(
-                                    colors = listOf(
-                                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
-                                        MaterialTheme.colorScheme.background,
-                                        MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.1f)
-                                    )
-                                )
-                            )
-                    )
+                )
 
-                    NavHost(
-                        navController = navController,
-                        startDestination = Home,
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-                        composable<Home> {
-                            HomeScreen(
-                                onExploreProjects = { navController.navigate(Projects) }
-                            )
-                        }
-                        composable<Projects> {
-                            ProjectsScreen(
-                                onNavigateToProject = { id -> navController.navigate(ProjectDetail(id)) }
-                            )
-                        }
-                        composable<About> {
-                            AboutScreen()
-                        }
-                        composable<ProjectDetail> { backStackEntry ->
-                            val route: ProjectDetail = backStackEntry.toRoute()
-                            ProjectDetailScreen(route.projectId, onBack = { navController.popBackStack() })
-                        }
+                NavHost(
+                    navController = navController,
+                    startDestination = Home
+                ) {
+                    composable<Home> { HomeScreen(onExploreProjects = { navController.navigate(Projects) }) }
+                    composable<Projects> { ProjectsScreen(onNavigateToProject = { id -> navController.navigate(ProjectDetail(id)) }) }
+                    composable<About> { AboutScreen() }
+                    composable<ProjectDetail> { backStackEntry ->
+                        val route: ProjectDetail = backStackEntry.toRoute()
+                        ProjectDetailScreen(route.projectId, onBack = { navController.popBackStack() })
                     }
                 }
             }
@@ -155,9 +93,7 @@ fun App() {
 @Composable
 fun HomeScreen(onExploreProjects: () -> Unit) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
+        modifier = Modifier.fillMaxSize().padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -166,33 +102,14 @@ fun HomeScreen(onExploreProjects: () -> Unit) {
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f))
         ) {
-            Column(
-                modifier = Modifier.padding(32.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Transforming Ideas into Digital Realities",
-                    style = MaterialTheme.typography.displaySmall,
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.primary
-                )
+            Column(modifier = Modifier.padding(32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Text("Transforming Ideas into Digital Realities", style = MaterialTheme.typography.displaySmall, textAlign = TextAlign.Center, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "Professional Software Developer crafting high-performance Android and Multiplatform solutions.",
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Text("Professional Software Developer.", style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
             }
         }
         
-        Button(
-            onClick = onExploreProjects,
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.height(64.dp).fillMaxWidth(0.6f),
-            elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
-        ) {
+        Button(onClick = onExploreProjects, shape = RoundedCornerShape(16.dp), modifier = Modifier.height(64.dp).fillMaxWidth(0.6f)) {
             Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
             Spacer(Modifier.width(12.dp))
             Text("View Portfolio", fontSize = 20.sp, fontWeight = FontWeight.Bold)
@@ -205,20 +122,14 @@ data class Project(val id: String, val title: String, val description: String, v
 @Composable
 fun ProjectsScreen(onNavigateToProject: (String) -> Unit) {
     val projects = listOf(
-        Project("1", "Task Master", "Advanced productivity suite with offline support", "Kotlin Multiplatform"),
-        Project("2", "Weather Pulse", "Hyper-local weather forecasts using real-time data", "Android Native"),
-        Project("3", "SecureVault", "Encrypted storage solution for sensitive information", "Cybersecurity"),
-        Project("4", "EcoTrack", "Sustainability tracker for everyday habits", "Jetpack Compose")
+        Project("1", "Task Master", "Advanced productivity suite", "KMP"),
+        Project("2", "Weather Pulse", "Hyper-local weather", "Android"),
+        Project("3", "SecureVault", "Encrypted storage", "Security"),
+        Project("4", "EcoTrack", "Sustainability tracker", "Compose")
     )
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(
-            "Curated Work",
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = 8.dp, bottom = 24.dp),
-            color = MaterialTheme.colorScheme.onBackground
-        )
+        Text("Curated Work", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 24.dp))
         LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
             items(projects) { project ->
                 ProjectCard(project, onClick = { onNavigateToProject(project.id) })
@@ -232,104 +143,36 @@ fun ProjectCard(project: Project, onClick: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        onClick = onClick,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        onClick = onClick
     ) {
-        Row(
-            modifier = Modifier.padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.primaryContainer),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp),
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            }
+        Row(modifier = Modifier.padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Default.Settings, contentDescription = null, modifier = Modifier.size(40.dp))
             Spacer(modifier = Modifier.width(20.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(project.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Text(project.category, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    project.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
             }
-            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null)
         }
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AboutScreen() {
     Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
         Text("About the Developer", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            "With years of experience in the mobile ecosystem, I specialize in building robust, " +
-            "scalable applications using Kotlin and Jetpack Compose. My mission is to bridge the " +
-            "gap between complex technology and intuitive user experiences.",
-            style = MaterialTheme.typography.bodyLarge,
-            lineHeight = 24.sp
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-        HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.outlineVariant)
-        Spacer(modifier = Modifier.height(32.dp))
-        Text("Core Competencies", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-        FlowRow(
-            modifier = Modifier.padding(top = 16.dp).fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            FilterChip(selected = true, onClick = {}, label = { Text("Kotlin") })
-            FilterChip(selected = true, onClick = {}, label = { Text("Android SDK") })
-            FilterChip(selected = true, onClick = {}, label = { Text("Jetpack Compose") })
-            FilterChip(selected = true, onClick = {}, label = { Text("KMP") })
-            FilterChip(selected = true, onClick = {}, label = { Text("Dagger Hilt") })
-            FilterChip(selected = true, onClick = {}, label = { Text("Coroutines") })
-        }
+        Text("Passionate software developer specializing in KMP and Jetpack Compose.", style = MaterialTheme.typography.bodyLarge)
     }
 }
 
 @Composable
 fun ProjectDetailScreen(id: String, onBack: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
-        TextButton(onClick = onBack, contentPadding = PaddingValues(0.dp)) {
-            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-            Spacer(Modifier.width(8.dp))
-            Text("Back to Portfolio")
+        TextButton(onClick = onBack) {
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+            Text("Back")
         }
-        Spacer(modifier = Modifier.height(24.dp))
-        Text("Project Case Study: $id", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(24.dp))
-        Surface(
-            modifier = Modifier.fillMaxWidth().height(250.dp),
-            shape = RoundedCornerShape(24.dp),
-            color = MaterialTheme.colorScheme.surfaceVariant,
-            tonalElevation = 8.dp
-        ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Icon(imageVector = Icons.Default.Star, contentDescription = null, modifier = Modifier.size(64.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        }
-        Spacer(modifier = Modifier.height(32.dp))
-        Text(
-            "This project represents a deep dive into $id. " +
-            "The challenge was to create a seamless experience that scales across multiple platforms. " +
-            "By leveraging the power of Compose, we achieved a consistent UI/UX with a single codebase.",
-            style = MaterialTheme.typography.bodyLarge,
-            lineHeight = 26.sp
-        )
+        Text("Project Case Study: $id", style = MaterialTheme.typography.headlineMedium)
     }
 }
