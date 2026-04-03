@@ -6,6 +6,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -13,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -63,7 +68,7 @@ fun App() {
                         }
                     )
                     NavigationDrawerItem(
-                        icon = { Icon(Icons.Default.List, contentDescription = null) },
+                        icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) },
                         label = { Text("Projects") },
                         selected = currentRoute?.contains("Projects") == true,
                         onClick = {
@@ -92,9 +97,12 @@ fun App() {
                                 Icon(Icons.Default.Menu, contentDescription = "Menu")
                             }
                         },
-                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        colors = TopAppBarDefaults.topAppBarColors(
                             containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.8f),
-                            titleContentColor = MaterialTheme.colorScheme.primary
+                            scrolledContainerColor = Color.Unspecified,
+                            navigationIconContentColor = Color.Unspecified,
+                            titleContentColor = MaterialTheme.colorScheme.primary,
+                            actionIconContentColor = Color.Unspecified
                         )
                     )
                 }
@@ -185,7 +193,7 @@ fun HomeScreen(onExploreProjects: () -> Unit) {
             modifier = Modifier.height(64.dp).fillMaxWidth(0.6f),
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
         ) {
-            Icon(Icons.Default.KeyboardArrowRight, contentDescription = null)
+            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
             Spacer(Modifier.width(12.dp))
             Text("View Portfolio", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }
@@ -257,7 +265,7 @@ fun ProjectCard(project: Project, onClick: () -> Unit) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            Icon(imageVector = Icons.Default.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
         }
     }
 }
@@ -298,7 +306,7 @@ fun AboutScreen() {
 fun ProjectDetailScreen(id: String, onBack: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize().padding(24.dp)) {
         TextButton(onClick = onBack, contentPadding = PaddingValues(0.dp)) {
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             Spacer(Modifier.width(8.dp))
             Text("Back to Portfolio")
         }
