@@ -38,6 +38,10 @@ jobs:
       - name: "🛠️ Build WasmJS App"
         run: gradle :composeApp:wasmJsBrowserDistribution
 
+      # 4.1 Create 404.html to support SPA routing on GitHub Pages
+      - name: "📁 Create 404.html for SPA"
+        run: cp ./composeApp/build/dist/wasmJs/productionExecutable/index.html ./composeApp/build/dist/wasmJs/productionExecutable/404.html
+
       # 5. Set up GitHub Pages
       - name: "📄 Configure GitHub Pages"
         uses: actions/configure-pages@v5

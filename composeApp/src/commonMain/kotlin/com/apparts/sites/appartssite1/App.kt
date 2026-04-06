@@ -27,6 +27,7 @@ import com.apparts.sites.appartssite1.ui.theme.AppTheme
 fun App() {
     AppTheme {
         val navController = rememberNavController()
+        BindNavigationToUrl(navController)
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
         Scaffold(
