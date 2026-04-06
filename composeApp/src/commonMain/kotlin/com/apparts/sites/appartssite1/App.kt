@@ -33,7 +33,7 @@ fun App() {
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = {
                 TopAppBar(
-                    title = { Text("AppArts Portfolio", fontWeight = FontWeight.Bold) },
+                    title = { Text("App Arts Portfolio", fontWeight = FontWeight.Bold) },
                     actions = {
                         TextButton(onClick = { navController.navigate(Home) }) { Text("Home") }
                         TextButton(onClick = { navController.navigate(Projects) }) { Text("Projects") }
