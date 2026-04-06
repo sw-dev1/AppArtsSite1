@@ -12,8 +12,8 @@ object Projects
 object About
 
 @Serializable
-data class ProjectDetail(val projectId: String)
-data class Project(val id: String,
+data class ProjectDetail(val projectId: Int)
+data class Project(val id: Int,
                    val title: String,
                    val description: String,
                    val category: String)

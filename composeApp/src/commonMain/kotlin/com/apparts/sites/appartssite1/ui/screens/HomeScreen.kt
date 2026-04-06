@@ -16,6 +16,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import com.apparts.sites.appartssite1.ui.theme.AppTypography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -47,7 +48,7 @@ fun HomeScreen(onExploreProjects: () -> Unit) {
             ) {
                 Text(
                     "Transforming Ideas into Digital Realities",
-                    style = MaterialTheme.typography.displaySmall,
+                    style = AppTypography.displaySmall,
                     textAlign = TextAlign.Center,
                     fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.primary
@@ -55,7 +56,7 @@ fun HomeScreen(onExploreProjects: () -> Unit) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     "Professional Software Developer.",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = AppTypography.titleMedium,
                     textAlign = TextAlign.Center
                 )
             }

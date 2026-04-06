@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import com.apparts.sites.appartssite1.ui.theme.AppTypography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -42,12 +43,12 @@ fun ProjectCard(project: Project, onClick: () -> Unit) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     project.title,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = AppTypography.titleLarge,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     project.category,
-                    style = MaterialTheme.typography.labelLarge,
+                    style = AppTypography.labelLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
