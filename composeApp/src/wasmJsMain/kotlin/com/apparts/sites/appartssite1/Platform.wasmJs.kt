@@ -32,7 +32,7 @@ actual fun BindNavigationToUrl(navController: NavHostController) {
                     // Using a simpler way to detect project detail for URL
                     val id = try {
                          entry.toRoute<ProjectDetail>().projectId
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                          0
                     }
                     "/project/$id"

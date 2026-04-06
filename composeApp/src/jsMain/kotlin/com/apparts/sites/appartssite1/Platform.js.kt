@@ -26,7 +26,7 @@ actual fun BindNavigationToUrl(navController: NavHostController) {
                 route.contains("Projects") -> "/projects"
                 route.contains("About") -> "/about"
                 route.contains("ProjectDetail") -> {
-                    val id = try { entry.toRoute<ProjectDetail>().projectId } catch (e: Exception) { 0 }
+                    val id = try { entry.toRoute<ProjectDetail>().projectId } catch (_: Exception) { 0 }
                     "/project/$id"
                 }
                 else -> "/"
