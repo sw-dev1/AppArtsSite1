@@ -11,3 +11,5 @@ expect fun getPlatform(): Platform
 
 @Composable
 expect fun BindNavigationToUrl(navController: NavHostController)
+
+expect fun openUrl(url: String)

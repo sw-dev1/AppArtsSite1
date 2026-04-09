@@ -13,7 +13,11 @@ kotlin {
     jvm()
     
     js {
-        browser()
+        browser {
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+            }
+        }
         binaries.executable()
     }
     
@@ -63,3 +67,9 @@ compose.desktop {
         }
     }
 }
+
+/*compose.resources {
+    publicResClass = true
+    packageOfResClass = "com.apparts.sites.appartssite1.generated.resources"
+    generateResClass = always
+}*/
