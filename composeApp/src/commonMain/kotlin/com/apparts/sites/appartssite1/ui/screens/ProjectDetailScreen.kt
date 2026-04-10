@@ -13,10 +13,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withLink
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 
 import com.apparts.sites.appartssite1.openUrl
@@ -47,6 +54,23 @@ fun ProjectDetailScreen(id: Int, onBack: () -> Unit) {
             style = AppTypography.headlineMedium
         )
         Text(text = project.description, style = AppTypography.bodyMedium)
+        
+        project.projectUrl?.let { url ->
+            val annotatedString = buildAnnotatedString {
+                append("Link to the GitHub project is ")
+                withLink(LinkAnnotation.Url(url) { link ->
+                    openUrl((link as LinkAnnotation.Url).url)
+                }) {
+                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary, textDecoration = TextDecoration.Underline)) {
+                        append("here")
+                    }
+                }
+            }
+            Text(
+                text = annotatedString,
+                style = AppTypography.bodyMedium
+            )
+        }
 
         if (project.playStoreBadge != null || project.appStoreBadge != null) {
             Spacer(modifier = Modifier.height(32.dp))

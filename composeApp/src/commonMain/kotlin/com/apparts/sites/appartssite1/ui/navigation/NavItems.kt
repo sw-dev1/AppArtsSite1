@@ -20,6 +20,7 @@ data class Project(
     val title: String,
     val description: String,
     val category: String,
+    val projectUrl: String? = null,
     val playStoreUrl: String? = null,
     val appStoreUrl: String? = null,
     val playStoreBadge: DrawableResource? = null,

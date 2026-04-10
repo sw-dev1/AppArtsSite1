@@ -9,8 +9,9 @@ val projects = listOf(
     Project(
         id = 0,
         title = "This Web Site",
-        description = "Developed with Kotlin Multiplatform WASM",
-        category = "KMP"
+        description = "Developed with Kotlin Multiplatform WASM, served from GitHub Pages",
+        category = "KMP",
+        projectUrl = "https://github.com/sw-dev1/AppArtsSite1"
     ),
     Project(
         id = 1,
