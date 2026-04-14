@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -27,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun HomeScreen(onExploreProjects: () -> Unit) {
+fun HomeScreen(onExploreProjects: () -> Unit, onExplorePatents: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize().padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,6 +71,21 @@ fun HomeScreen(onExploreProjects: () -> Unit) {
             Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
             Spacer(Modifier.width(12.dp))
             Text("View Portfolio", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = onExplorePatents,
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
+            modifier = Modifier.height(64.dp).fillMaxWidth(0.6f),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondary
+            )
+        ) {
+            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null)
+            Spacer(Modifier.width(12.dp))
+            Text("View Patents", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         }
     }
 }

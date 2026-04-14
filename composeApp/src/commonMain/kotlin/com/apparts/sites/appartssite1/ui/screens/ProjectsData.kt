@@ -3,7 +3,20 @@ package com.apparts.sites.appartssite1.ui.screens
 import appartssite1.composeapp.generated.resources.Res
 import appartssite1.composeapp.generated.resources.app_store_badge_en
 import appartssite1.composeapp.generated.resources.google_play_store_badge_en
-import com.apparts.sites.appartssite1.ui.navigation.Project
+import org.jetbrains.compose.resources.DrawableResource
+
+
+data class Project(
+    val id: Int,
+    val title: String,
+    val description: String,
+    val category: String,
+    val projectUrl: String? = null,
+    val playStoreUrl: String? = null,
+    val appStoreUrl: String? = null,
+    val playStoreBadge: DrawableResource? = null,
+    val appStoreBadge: DrawableResource? = null
+)
 
 val projects = listOf(
     Project(

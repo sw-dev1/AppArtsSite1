@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.apparts.sites.appartssite1.ui.navigation.Project
 
 @Composable
 fun ProjectCard(project: Project, onClick: () -> Unit) {

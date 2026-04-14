@@ -15,8 +15,10 @@ import androidx.navigation.toRoute
 import com.apparts.sites.appartssite1.ui.screens.AboutScreen
 import com.apparts.sites.appartssite1.ui.screens.HomeScreen
 import com.apparts.sites.appartssite1.ui.screens.ProjectsScreen
+import com.apparts.sites.appartssite1.ui.screens.PatentsScreen
 import com.apparts.sites.appartssite1.ui.navigation.About
 import com.apparts.sites.appartssite1.ui.navigation.Home
+import com.apparts.sites.appartssite1.ui.navigation.Patents
 import com.apparts.sites.appartssite1.ui.navigation.ProjectDetail
 import com.apparts.sites.appartssite1.ui.navigation.Projects
 import com.apparts.sites.appartssite1.ui.screens.ProjectDetailScreen
@@ -38,6 +40,7 @@ fun App() {
                     actions = {
                         TextButton(onClick = { navController.navigate(Home) }) { Text("Home") }
                         TextButton(onClick = { navController.navigate(Projects) }) { Text("Projects") }
+                        TextButton(onClick = { navController.navigate(Patents) }) { Text("Patents") }
                         TextButton(onClick = { navController.navigate(About) }) { Text("About") }
                     },
                     scrollBehavior = scrollBehavior
@@ -62,11 +65,14 @@ fun App() {
                     startDestination = Home
                 ) {
                     composable<Home> {
-                        HomeScreen(onExploreProjects = {
-                            navController.navigate(
-                                Projects
-                            )
-                        })
+                        HomeScreen(
+                            onExploreProjects = {
+                                navController.navigate(Projects)
+                            },
+                            onExplorePatents = {
+                                navController.navigate(Patents)
+                            }
+                        )
                     }
                     composable<Projects> {
                         ProjectsScreen(onNavigateToProject = { id ->
@@ -74,6 +80,9 @@ fun App() {
                                 ProjectDetail(id)
                             )
                         })
+                    }
+                    composable<Patents> {
+                        PatentsScreen()
                     }
                     composable<About> { AboutScreen() }
                     composable<ProjectDetail> { backStackEntry ->
