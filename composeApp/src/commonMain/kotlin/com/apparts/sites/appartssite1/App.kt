@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +46,9 @@ fun App() {
                     },
                     scrollBehavior = scrollBehavior
                 )
+            },
+            bottomBar = {
+                AdBanner()
             }
         ) { innerPadding ->
             Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
@@ -94,6 +98,17 @@ fun App() {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun AdBanner() {
+    Surface(
+        modifier = Modifier.fillMaxWidth().height(60.dp),
+        color = MaterialTheme.colorScheme.secondaryContainer,
+        shadowElevation = 8.dp
+    ) {
+        AdBannerView(modifier = Modifier.fillMaxSize())
     }
 }
 

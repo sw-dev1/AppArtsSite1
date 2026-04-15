@@ -11,6 +11,11 @@ import com.apparts.sites.appartssite1.ui.navigation.ProjectDetail
 import androidx.navigation.toRoute
 import kotlin.js.ExperimentalWasmJsInterop
 
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+
 class WasmPlatform: Platform {
     override val name: String = "Web with Kotlin/Wasm"
 }
@@ -66,4 +71,14 @@ actual fun BindNavigationToUrl(navController: NavHostController) {
 
 actual fun openUrl(url: String) {
     window.open(url, "_blank")
+}
+
+@Composable
+actual fun AdBannerView(modifier: Modifier) {
+    // In a real Web production app, you would use a div and call adsbygoogle.push
+    // Since Compose Wasm renders to a canvas, you typically position an HTML element
+    // on top of the canvas or use an iframe.
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+        Text("Web Ad Slot (AdSense)")
+    }
 }
