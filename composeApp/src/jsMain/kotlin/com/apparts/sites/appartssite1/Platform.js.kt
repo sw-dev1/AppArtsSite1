@@ -6,7 +6,6 @@ import androidx.navigation.NavHostController
 import kotlinx.browser.window
 import com.apparts.sites.appartssite1.ui.navigation.Home
 import com.apparts.sites.appartssite1.ui.navigation.About
-import com.apparts.sites.appartssite1.ui.navigation.Patents
 import com.apparts.sites.appartssite1.ui.navigation.Projects
 import com.apparts.sites.appartssite1.ui.navigation.ProjectDetail
 import androidx.navigation.toRoute
@@ -30,42 +29,33 @@ actual fun BindNavigationToUrl(navController: NavHostController) {
             val path = when {
                 route.contains("Home") -> "/"
                 route.contains("Projects") -> "/projects"
-                route.contains("Patents") -> "/patents"
                 route.contains("About") -> "/about"
                 route.contains("ProjectDetail") -> {
-                    val id = try { entry.toRoute<ProjectDetail>().projectId } catch (_: Exception) { null }
-                    if (id != null) "/project/$id" else null
+                    val id = try { entry.toRoute<ProjectDetail>().projectId } catch (_: Exception) { 0 }
+                    "/project/$id"
                 }
-                else -> null
+                else -> "/"
             }
-            if (path != null && window.location.pathname != path) {
+            if (window.location.pathname != path) {
                 window.history.pushState(null, "", path)
             }
         }
     }
 
     LaunchedEffect(Unit) {
-        fun handlePath(path: String) {
+        window.onpopstate = {
+            val path = window.location.pathname
             when {
                 path == "/" || path == "" -> navController.navigate(Home) {
                     popUpTo(Home) { inclusive = true }
                 }
                 path == "/projects" -> navController.navigate(Projects)
-                path == "/patents" -> navController.navigate(Patents)
                 path == "/about" -> navController.navigate(About)
                 path.startsWith("/project/") -> {
-                    val id = path.substringAfterLast("/").toIntOrNull()
-                    if (id != null) {
-                        navController.navigate(ProjectDetail(id))
-                    }
+                    val id = path.substringAfterLast("/").toIntOrNull() ?: 0
+                    navController.navigate(ProjectDetail(id))
                 }
             }
-        }
-
-        handlePath(window.location.pathname)
-
-        window.onpopstate = {
-            handlePath(window.location.pathname)
         }
     }
 }
@@ -80,4 +70,3 @@ actual fun AdBannerView(modifier: Modifier) {
         Text("JS Web Ad Slot (AdSense)")
     }
 }
-
