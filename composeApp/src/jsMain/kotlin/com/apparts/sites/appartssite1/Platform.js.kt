@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import kotlinx.browser.window
 import com.apparts.sites.appartssite1.ui.navigation.Home
 import com.apparts.sites.appartssite1.ui.navigation.About
+import com.apparts.sites.appartssite1.ui.navigation.Patents
 import com.apparts.sites.appartssite1.ui.navigation.Projects
 import com.apparts.sites.appartssite1.ui.navigation.ProjectDetail
 import androidx.navigation.toRoute
@@ -29,6 +30,7 @@ actual fun BindNavigationToUrl(navController: NavHostController) {
             val path = when {
                 route.contains("Home") -> "/"
                 route.contains("Projects") -> "/projects"
+                route.contains("Patents") -> "/patents"
                 route.contains("About") -> "/about"
                 route.contains("ProjectDetail") -> {
                     val id = try { entry.toRoute<ProjectDetail>().projectId } catch (_: Exception) { 0 }
@@ -50,6 +52,7 @@ actual fun BindNavigationToUrl(navController: NavHostController) {
                     popUpTo(Home) { inclusive = true }
                 }
                 path == "/projects" -> navController.navigate(Projects)
+                path == "/patents" -> navController.navigate(Patents)
                 path == "/about" -> navController.navigate(About)
                 path.startsWith("/project/") -> {
                     val id = path.substringAfterLast("/").toIntOrNull() ?: 0
