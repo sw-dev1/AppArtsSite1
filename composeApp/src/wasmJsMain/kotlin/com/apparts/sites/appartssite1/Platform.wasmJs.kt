@@ -44,7 +44,7 @@ actual fun BindNavigationToUrl(navController: NavHostController) {
                     }
                     "/project/$id"
                 }
-                else -> "/"
+                else -> null
             }
             
             if (window.location.pathname != path) {
